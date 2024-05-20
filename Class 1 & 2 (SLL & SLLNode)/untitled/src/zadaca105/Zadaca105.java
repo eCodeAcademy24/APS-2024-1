@@ -1,5 +1,8 @@
 package zadaca105;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -240,8 +243,46 @@ class SLL<E> {
 
 public class Zadaca105 {
 
+    private static int zadaca105(SLL<Integer> lista) {
+        SLLNode<Integer> tmp = lista.getFirst();
 
-    public static void main(String[] args) {
+        int countDeleted = 0;
+
+        while (tmp != null) {
+            if (tmp.element % 2 == 0) {
+                lista.delete(tmp);
+                ++countDeleted;
+            }
+
+            tmp = tmp.succ;
+        }
+
+        System.out.println(lista);
+        return countDeleted;
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        // 8
+        // 3 4 7 6 4 7 3 2
+        // 7
+        String s;
+        s = br.readLine();
+        int n = Integer.parseInt(s);
+
+        SLL<Integer> lista = new SLL<Integer>();
+
+        s = br.readLine();
+        String[] parts = s.split(" ");
+
+        for (int i = 0; i < n; i++) {
+            lista.insertLast(Integer.parseInt(parts[i]));
+        }
+
+
+        System.out.println("Izbrishani se " + zadaca105(lista) + " jazli");
 
     }
+
+
 }

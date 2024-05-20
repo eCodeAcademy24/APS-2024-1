@@ -1,8 +1,5 @@
-package zadaca104;
+package zadaca1;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -22,11 +19,12 @@ class SLLNode<E> {
     }
 }
 
+
 class SLL<E> {
     private SLLNode<E> first;
 
     public SLL() {
-        // Construct an empty SLL
+        // Construct an empty zadaca1.SLL
         this.first = null;
     }
 
@@ -229,74 +227,66 @@ class SLL<E> {
     }
 }
 
-//Дадена е линеарно поврзана листа. Да се напише функција која во листата ќе го
-//пронајде последниот јазол со информација x и ќе го префрли на крајот на листата. Како
-//резултат функцијата да ја враќа позицијата (броено од почетокот на листата) на која
-//бил пронајден бараниот јазол или -1 ако таков јазол не бил пронајден во листата.
-//Input
-// 8
-// 3 4 7 6 4 7 3 2
-// 7
-//Output
-// 3 4 7 6 4 3 2 7
-// позиција 6
+//Дадена е еднострано поврзана листа, ако во листата има два парни елемента еден до друг да се избрише првиот ако има два непарни исто така да се избрише првиот.
+//Влез:
+//10
+//1 2 3 5 7 4 6 12 9 11
+//Излез:
+//1 2 5 7 6 12 11
+
+//Овој тест пример е ставен заради проверката во заградите.
+//Влез:
+//10
+//1 2 3 5 7 4 6 12 9 14
+//Излез:
+//1 2 5 7 6 12 9 14
 
 
-public class Zadaca104 {
-    public static int zadaca104(SLL<Integer> lista, int x) {
-        SLLNode<Integer> tmp = lista.find(x);
-        if (tmp == null || tmp.element != x) {
-            return -1;
-        }
+public class Zadaca1 {
 
-        tmp = lista.getFirst();
-        SLLNode<Integer> pamtiTmp = null;
+    public static void zadaca1(SLL<Integer> lista) {
+        SLLNode<Integer> tmp = lista.getFirst();
 
-        int counter = 1;
-        int pamtiCounter = 0;
-
-        while (tmp != null) {
-            if (tmp.element == x) {
-                pamtiTmp = tmp;
-                pamtiCounter = counter;
+        // sekogash koga treba da sporeduvate dva elementi eden do drug proveruvajte
+        // dali i sledbenikot na tmp e razlichen od null
+        while (tmp != null && tmp.succ != null) {
+            if ((tmp.element % 2 == 0 && tmp.succ.element % 2 == 0) ||
+                    (tmp.element % 2 != 0 && tmp.succ.element % 2 != 0)) {
+                lista.delete(tmp);
+                tmp = tmp.succ;
             }
 
-            ++counter;
+//            if ((tmp.element % 2 == 0 && tmp.succ.element % 2 == 0)) {
+//                lista.delete(tmp);
+//                tmp = tmp.succ;
+//            } else if ((tmp.element % 2 != 0 && tmp.succ.element % 2 != 0)) {
+//                lista.delete(tmp);
+//                tmp = tmp.succ;
+//            }
+
             tmp = tmp.succ;
         }
-
-//        if (pamtiTmp == null /* pamtiCounter == 0 */ ) {
-//            return -1;
-//        }
-
-        lista.insertLast(x);
-        lista.delete(pamtiTmp);
-        System.out.println(lista);
-        return pamtiCounter;
     }
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        // 8
-        // 3 4 7 6 4 7 3 2
-        // 7
-        String s;
-        s = br.readLine();
-        int n = Integer.parseInt(s);
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int n = scanner.nextInt();
 
         SLL<Integer> lista = new SLL<Integer>();
 
-        s = br.readLine();
-        String[] parts = s.split(" ");
-
         for (int i = 0; i < n; i++) {
-            lista.insertLast(Integer.parseInt(parts[i]));
+            // dodavanje na elementi vo lista
+            int broj = scanner.nextInt(); //
+            lista.insertLast(broj);
         }
 
-        s = br.readLine();
-        int x = Integer.parseInt(s);
+        // povik na funkcija
+        zadaca1(lista);
 
+        // pechatenje na lista
+        System.out.println(lista);
 
-        System.out.println(zadaca104(lista, x));
     }
 }

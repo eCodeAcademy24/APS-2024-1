@@ -1,8 +1,5 @@
-package zadaca104;
+package zadaca3;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -21,6 +18,7 @@ class SLLNode<E> {
         return element.toString();
     }
 }
+
 
 class SLL<E> {
     private SLLNode<E> first;
@@ -228,75 +226,78 @@ class SLL<E> {
         }
     }
 }
+//Дадена е еднострано поврзана листа и да се модифицира листата на тој начин што ќе се почне од првиот јазел,
+//вредноста на тој јазел се зема како вредност за локација после колку јазли треба да се вметне јазел со сумата на јазлите до таа локација.
+//Откако ќе се вметне јазел се продожува од наредниот и се повторува постапката се додека не се стигне на крај од листата.
+//Влез:
+//15
+//2 3 4 5 2 4 5 7 5 9 2 3 4 13 2
+//Излез:
+//2 3 5 4 5 2 4 15 5 7 5 9 2 28 3 4 13 20 2
 
-//Дадена е линеарно поврзана листа. Да се напише функција која во листата ќе го
-//пронајде последниот јазол со информација x и ќе го префрли на крајот на листата. Како
-//резултат функцијата да ја враќа позицијата (броено од почетокот на листата) на која
-//бил пронајден бараниот јазол или -1 ако таков јазол не бил пронајден во листата.
-//Input
-// 8
-// 3 4 7 6 4 7 3 2
-// 7
-//Output
-// 3 4 7 6 4 3 2 7
-// позиција 6
+//2 3 5 4 5 2 4 5 7 5 9 2 3 4 13 2
 
+public class Zadaca3 {
 
-public class Zadaca104 {
-    public static int zadaca104(SLL<Integer> lista, int x) {
-        SLLNode<Integer> tmp = lista.find(x);
-        if (tmp == null || tmp.element != x) {
-            return -1;
-        }
+    private static void zadaca3(SLL<Integer> lista) {
+        SLLNode<Integer> tmp = lista.getFirst();
 
-        tmp = lista.getFirst();
-        SLLNode<Integer> pamtiTmp = null;
-
-        int counter = 1;
-        int pamtiCounter = 0;
-
+        //2 3 5 4 5 2 4 5 7 5 9 2 3 4 13 2
         while (tmp != null) {
-            if (tmp.element == x) {
-                pamtiTmp = tmp;
-                pamtiCounter = counter;
+            int pamti_prv_element = tmp.element;
+//            int counter = 0;
+            int suma = 0;
+
+            for (int i = 0; i < pamti_prv_element - 1; i++) {
+                if (tmp == null) {
+                    break;
+                }
+
+                suma += tmp.element;
+                tmp = tmp.succ;
+
             }
 
-            ++counter;
-            tmp = tmp.succ;
+//            while (tmp != null) {
+//                ++counter;
+//                suma += tmp.element;
+//
+//                if (counter == pamti_prv_element) {
+//                    lista.insertAfter(suma, tmp);
+//                    tmp = tmp.succ;
+//                    break;
+//                }
+//
+//                tmp = tmp.succ;
+//            }
+
+            if (tmp == null) {
+                break;
+            }
+
+            suma += tmp.element;
+
+            lista.insertAfter(suma, tmp);
+            tmp = tmp.succ.succ;
         }
 
-//        if (pamtiTmp == null /* pamtiCounter == 0 */ ) {
-//            return -1;
-//        }
-
-        lista.insertLast(x);
-        lista.delete(pamtiTmp);
-        System.out.println(lista);
-        return pamtiCounter;
     }
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        // 8
-        // 3 4 7 6 4 7 3 2
-        // 7
-        String s;
-        s = br.readLine();
-        int n = Integer.parseInt(s);
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int n = scanner.nextInt();
 
         SLL<Integer> lista = new SLL<Integer>();
 
-        s = br.readLine();
-        String[] parts = s.split(" ");
-
         for (int i = 0; i < n; i++) {
-            lista.insertLast(Integer.parseInt(parts[i]));
+            int element = scanner.nextInt();
+            lista.insertLast(element);
         }
 
-        s = br.readLine();
-        int x = Integer.parseInt(s);
-
-
-        System.out.println(zadaca104(lista, x));
+        zadaca3(lista);
+        System.out.println(lista);
     }
+
+
 }
