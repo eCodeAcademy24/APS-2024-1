@@ -189,7 +189,7 @@ class DLL<E> {
 
 //Дадена е двојно поврзана листа. Да се напише функција која ќе создаде нова листа, во која ќе ги префрли јазлите од
 // првата листа со инфо поле помало или еднакво од средната вредност на јаслите од првата листа. Не смеете да ги менувате само елементите во јазлите туку
-// мора цели јазли
+// мора цели јазли. Новата листа мора постојано да биде сортирана.
 //Влез:
 //10
 //3 14 5 6 2 77 33 4 66 100
@@ -217,12 +217,51 @@ public class Zadaca2 {
     }
 
     public static void zadaca2(DLL<Integer> lista1, DLL<Integer> lista2) {
+        DLLNode<Integer> tmp = lista1.getFirst();
+        int sum = 0;
+
+        while (tmp != null) {
+            sum += tmp.element;
+            tmp = tmp.succ;
+        }
+
+        int counter = lista1.length();
+        float avg = (float) sum / counter;
+
+        tmp = lista1.getFirst();
+        while (tmp != null) {
+            if (tmp.element > avg) {
+                tmp = tmp.succ;
+                continue;
+            }
+
+            lista2.insertLast(tmp.element);
+
+//            bubbleSwap(lista2);
+            // tret chekor postojano sortiranje
+            DLLNode<Integer> from_first = lista2.getFirst();
+            DLLNode<Integer> from_last = lista2.getLast();
+            while (from_first != null && from_first != from_last) {
+                if (from_first.element > from_last.element) {
+                    lista2.insertBefore(from_last.element, from_first);
+                    lista2.delete(from_last);
+                    break;
+                }
+
+                from_first = from_first.succ;
+            }
+
+            tmp = tmp.succ;
+        }
 
 
     }
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
+        //10
+        //3 14 5 6 2 77 33 4 66 100
 
         int n = scanner.nextInt();
 
@@ -233,7 +272,7 @@ public class Zadaca2 {
             lista.insertLast(broj);
         }
 
-        DLL<Integer> lista1 = new DLL<Integer>();
+        DLL<Integer> lista1 = new DLL<>();
 
         zadaca2(lista, lista1);
 
