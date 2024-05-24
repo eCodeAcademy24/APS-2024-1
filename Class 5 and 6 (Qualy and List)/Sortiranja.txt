@@ -1,0 +1,111 @@
+Selection Sort
+
+2 8 5 3 9 4 1
+
+cekor 1: 1 8 5 3 9 4 2
+cekor 2: 1 2 5 3 9 4 8
+cekor 3: 1 2 3 5 9 4 8
+cekor 4: 1 2 3 4 9 5 8
+cekor 5: 1 2 3 4 5 9 8
+cekor 6: 1 2 3 4 5 8 9
+
+Se deli nizata na sortiran del i nesortiran del i se zema sekogash minimum od nesortiraniot del.
+Koga kje se najde se zamenuvaat minimumot so prviot element od nesortiraniot del na nizata
+
+kod:
+
+for (j = 0; j < n - 1; j++) {
+
+    int iMin = j;
+    
+    for(i = j + 1; i < n; j++) {
+
+       if(a[i] < a[iMin]) {
+          iMin = i;
+       }
+    }
+
+    if(iMin != j)
+      swap(a[j], a[iMin])
+}
+
+
+Insertion Sort
+
+Кога имаме низа која е речиси сортирана, алгоритмот кој најдобро функционира во такви случаи е Insertion Sort. Причините за ова се:
+
+Перформанси на веќе сортирани низи: Insertion Sort има најдобри перформанси (O(n)) кога низата е веќе сортирана или речиси сортирана. 
+Ова се должи на тоа што алгоритмот едноставно минува низ низата и ги проверува елементите еден по еден, 
+без да направи многу замени ако елементите се веќе на своите места.
+
+Мал број на неопходни промени: Ако има само 1 или 2 елементи кои не се на своите места, 
+Insertion Sort брзо ќе ги стави на правилната позиција со многу мал број на поместувања, 
+со што ќе се минимизира бројот на потребни операции.
+
+Ниски трошоци за преместување: Insertion Sort функционира така што елементите ги преместува директно на своите правилни 
+места со минимално преместување на останатите елементи. Ова го прави идеален за низи каде што е потребно малку поместување.
+
+За споредба, други алгоритми како што се Quick Sort или Merge Sort имаат сложеност O(n log n) и не се толку 
+ефикасни во случаи кога низата е речиси сортирана. Bubble Sort и Selection Sort иако се O(n^2) во најлош случај, 
+немаат истите предности како Insertion Sort кога низата е речиси сортирана.
+
+Поради овие причини, Insertion Sort е најдобриот избор за сортирање на речиси сортирани низи.
+
+2 8 5 3 9 4
+
+cekor 1: 2 8 5 3 9 4
+cekor 2: 2 8 5 3 9 4
+cekor 3: 2 5 8 3 9 4
+cekor 4: 2 3 5 8 9 4
+cekor 5: 2 3 5 8 9 4
+cekor 6: 2 3 4 5 8 9
+
+Koga sme kaj nekoj element gledame dali ima nekoj element pogolem od nego od negovata leva strana
+
+kod:
+
+for i : 1 to length(A) - 1
+ j = i
+ while j > 0 and A[j - 1] > A[j]
+ swap A[j] and A[j - 1]
+ j = j - 1
+
+
+Quick Sort
+
+Ima najloshi performansi koga na vlez kje dobie skoro sortirana niza poradi izbiranje na losh pivot element
+se zema pivot element i se stavaat site pomali elementi levo od nego i site pogolemi desni od nego i tie se sortiraat
+
+
+Merge sort
+
+se deli
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
