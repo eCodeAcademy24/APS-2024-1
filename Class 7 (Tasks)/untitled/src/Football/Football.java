@@ -1,8 +1,8 @@
-package AvgustIspitSLLAPS;
+package Football;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 class SLLNode<E> {
     protected E element;
@@ -19,12 +19,11 @@ class SLLNode<E> {
     }
 }
 
-
 class SLL<E> {
     private SLLNode<E> first;
 
     public SLL() {
-        // Construct an empty zadaca1.SLL
+        // Construct an empty SLL
         this.first = null;
     }
 
@@ -163,114 +162,115 @@ class SLL<E> {
         return first;
     }
 
-    public Iterator<E> iterator() {
-        // Return an iterator that visits all elements of this list, in left-to-right order.
-        return new LRIterator<E>();
+
+}
+
+class Player implements Comparable<Player> {
+    int number;
+    int rating;
+    int years;
+
+    public Player(int number, int rating, int years) {
+        this.number = number;
+        this.rating = rating;
+        this.years = years;
     }
 
-    // //////////Inner class ////////////
 
-    private class LRIterator<E> implements Iterator<E> {
-
-        private SLLNode<E> place, curr;
-
-        private LRIterator() {
-            place = (SLLNode<E>) first;
-            curr = null;
+    @Override
+    public int compareTo(Player o) {
+        if (o.rating > this.rating)
+            return -1;
+        if (o.rating < this.rating)
+            return 1;
+        if (o.rating == this.rating) {
+            if (o.years > this.years)
+                return 1;
+            if (o.years < this.years)
+                return -1;
         }
+        return 0;
 
-        public boolean hasNext() {
-            return (place != null);
-        }
-
-        public E next() {
-            if (place == null)
-                throw new NoSuchElementException();
-            E nextElem = place.element;
-            curr = place;
-            place = place.succ;
-            return nextElem;
-        }
-
-        public void remove() {
-            //Not implemented
-        }
-    }
-
-    public void mirror() {
-        if (first != null) {
-            //m=nextsucc, p=tmp,q=next
-            SLLNode<E> tmp = first;
-            SLLNode<E> newsucc = null;
-            SLLNode<E> next;
-
-            while (tmp != null) {
-                next = tmp.succ;
-                tmp.succ = newsucc;
-                newsucc = tmp;
-                tmp = next;
-            }
-            first = newsucc;
-        }
-
-    }
-
-    public void merge(SLL<E> in) {
-        if (first != null) {
-            SLLNode<E> tmp = first;
-            while (tmp.succ != null)
-                tmp = tmp.succ;
-            tmp.succ = in.getFirst();
-        } else {
-            first = in.getFirst();
-        }
     }
 }
 
-//Dadena e ednostrano povrzana lista i daden e nekoj broj k. Listata treba da se dvizhi na desno k pati.
 
-//Input
-// 5
-// 1 2 3 4 5
-// 2
-// Output
-// 4 5 1 2 3
+public class Football {
 
+    public static void sort(SLL<Player> list) {
+        SLLNode<Player> tmp1 = list.getFirst();
+        while (tmp1 != null) {
+            SLLNode<Player> tmp2 = tmp1.succ;
+            while (tmp2 != null) {
+                if (tmp1.element.compareTo(tmp2.element) < 0) {
+                    Player pom = tmp1.element;
+                    tmp1.element = tmp2.element;
+                    tmp2.element = pom;
+                }
+                tmp2 = tmp2.succ;
+            }
 
-public class Dvizhi {
-
-    private static void dvizhi(SLL<Integer> lista, int k) {
-        int counter = 0;
-
-        while (counter != k) {
-            SLLNode<Integer> tmp = lista.getFirst();
-
-            while (tmp.succ != null) {
-                tmp = tmp.succ;
-            } // posle while-ot tmp kje bide postaven da pokazhuva kon posledniot jazol
-
-            lista.insertFirst(tmp.element);
-            lista.delete(tmp);
+            tmp1 = tmp1.succ;
         }
-
-        System.out.println(lista);
     }
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+    //1 1 3
+    //2 2 3
+    //3 3 4
+    //4 4 5
+    //5 5 5
+    //6 6 6
+    //7 7 6
+    //8 8 7
+    //9 9 7
+    //10 10 8
+    //11 11 8
+    //12 3 2
+    //13 2 1
+    //14 1 5
+    //15 5 3
+    //16 5 4
+    //17 10 2
+    //18 3 3
+    //19 2 1
+    //20 9 3
+    //21 9 1
+    //22 1 1
+    //2
 
-        int n = sc.nextInt();
+    public static void changePlayers(SLL<Player> representative_team, SLL<Player> under_21_team, int N) {
 
-        SLL<Integer> lista = new SLL<>();
 
-        for (int i = 0; i < n; i++) {
-            lista.insertLast(sc.nextInt());
-        }
-
-        int k = sc.nextInt();
-
-        dvizhi(lista, k);
     }
 
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        SLL<Player> representative_team = new SLL<Player>();
+        SLL<Player> under_21_team = new SLL<Player>();
+        for (int i = 0; i < 11; i++) {
+            String[] pom = bf.readLine().split(" ");
+            Player p = new Player(Integer.parseInt(pom[0]), Integer.parseInt(pom[1]), Integer.parseInt(pom[2]));
+            representative_team.insertLast(p);
+        }
 
+        for (int i = 0; i < 11; i++) {
+            String[] pom = bf.readLine().split(" ");
+            Player p = new Player(Integer.parseInt(pom[0]), Integer.parseInt(pom[1]), Integer.parseInt(pom[2]));
+            under_21_team.insertLast(p);
+        }
+
+        sort(under_21_team);
+        int N = Integer.parseInt(bf.readLine());
+
+
+        changePlayers(representative_team, under_21_team, N);
+        SLLNode<Player> tmp = representative_team.getFirst();
+
+        while (tmp != null) {
+            System.out.print(tmp.element.number + " ");
+            tmp = tmp.succ;
+        }
+
+
+    }
 }
