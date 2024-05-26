@@ -239,7 +239,48 @@ public class Football {
     //2
 
     public static void changePlayers(SLL<Player> representative_team, SLL<Player> under_21_team, int N) {
+        int counter = 0;
+        while (counter != N) {
+            ++counter;
+            // prv cekor da go najdeme najiskusniot od representative_team
+            SLLNode<Player> najiskusen = representative_team.getFirst();
+            SLLNode<Player> tmp = representative_team.getFirst().succ;
 
+            while (tmp != null) {
+                if (tmp.element.years == najiskusen.element.years) {
+                    if (tmp.element.rating < najiskusen.element.rating) {
+                        najiskusen = tmp;
+                        tmp = tmp.succ;
+                        continue;
+                    }
+                }
+
+                if (tmp.element.years > najiskusen.element.years) {
+                    najiskusen = tmp;
+                }
+
+                tmp = tmp.succ;
+            }
+
+            // vtor cekor da go najdeme igracot so najgolem rejting od under_21_team
+            SLLNode<Player> najdobar = under_21_team.getFirst();
+            SLLNode<Player> tmp2 = under_21_team.getFirst().succ;
+
+
+            while (tmp2 != null) {
+                if (najdobar.element.rating < tmp2.element.rating) {
+                    najdobar = tmp2;
+                }
+                tmp2 = tmp2.succ;
+            }
+
+            // tret cekor da se stavi igracot so najgolem rejting pred igracot koj sto e najiskusen,
+            // i potoa da se izbrishe najiskusniot od representative_team
+            representative_team.insertBefore(najdobar.element, najiskusen);
+            representative_team.delete(najiskusen);
+            under_21_team.delete(najdobar);
+
+        }
 
     }
 
