@@ -1,101 +1,94 @@
 package Spoi_Listi;
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-class SLLNode {
-    int id;
-    int age;
-    SLLNode succ;
+class SLLNode<E> {
+    protected E element;
+    protected SLLNode<E> succ;
 
-    public SLLNode(int id, int age, SLLNode succ) {
-        this.id = id;
-        this.age = age;
+    public SLLNode(E elem, SLLNode<E> succ) {
+        this.element = elem;
         this.succ = succ;
     }
 
     @Override
     public String toString() {
-        return String.valueOf(id);
+        return element.toString();
     }
 }
 
-class SLL {
-    SLLNode first;
+class SLL<E> {
+    private SLLNode<E> first;
 
     public SLL() {
+        // Construct an empty SLL
         this.first = null;
+    }
+
+    public void deleteList() {
+        first = null;
     }
 
     public int length() {
         int ret;
         if (first != null) {
-            SLLNode tmp = first;
+            SLLNode<E> tmp = first;
             ret = 1;
             while (tmp.succ != null) {
-                tmp = tmp.succ;
+                tmp = tmp.succ; // i++
                 ret++;
             }
             return ret;
         } else
             return 0;
+
     }
 
-    public void deleteFirst() {
+    @Override
+    public String toString() {
+        String ret = new String();
         if (first != null) {
-            SLLNode tmp = first;
-            first = first.succ;
-        } else {
-            System.out.println("Listata e prazna");
-        }
-    }
-
-    public void delete(SLLNode node) {
-        if (first != null) {
-            SLLNode tmp = first;
-            if (first == node) {
-                this.deleteFirst();
-                return;
-            }
-            while (tmp.succ != node && tmp.succ.succ != null)
+            SLLNode<E> tmp = first;
+            ret += tmp + "->";
+            while (tmp.succ != null) {
                 tmp = tmp.succ;
-            if (tmp.succ == node) {
-                tmp.succ = tmp.succ.succ;
-            } else {
-                System.out.println("Elementot ne postoi vo listata");
+                ret += tmp + "->";
             }
-        } else {
-            System.out.println("Listata e prazna");
-        }
-
+        } else
+            ret = "Prazna lista!!!";
+        return ret;
     }
 
-    public void insertFirst(int id, int age) {
-        SLLNode ins = new SLLNode(id, age, first);
+    public void insertFirst(E o) {
+        SLLNode<E> ins = new SLLNode<E>(o, first);
         first = ins;
     }
 
-    public void insertAfter(int id, int age, SLLNode node) {
+    public void insertAfter(E o, SLLNode<E> node) {
         if (node != null) {
-            SLLNode ins = new SLLNode(id, age, node.succ);
+            SLLNode<E> ins = new SLLNode<E>(o, node.succ);
             node.succ = ins;
         } else {
-            System.out.println("Dadenot jazol e null");
+            System.out.println("Dadeniot jazol e null");
         }
     }
 
-    public void insertBefore(int id, int age, SLLNode before) {
+    public void insertBefore(E o, SLLNode<E> before) {
 
         if (first != null) {
-            SLLNode tmp = first;
             if (first == before) {
-                this.insertFirst(id, age);
+                this.insertFirst(o);
                 return;
             }
             //ako first!=before
+            SLLNode<E> tmp = first;
             while (tmp.succ != before)
                 tmp = tmp.succ;
+
             if (tmp.succ == before) {
-                SLLNode ins = new SLLNode(id, age, before);
+                SLLNode<E> ins = new SLLNode<E>(o, before);
                 tmp.succ = ins;
             } else {
                 System.out.println("Elementot ne postoi vo listata");
@@ -105,35 +98,138 @@ class SLL {
         }
     }
 
-
-    public void insertLast(int id, int age) {
+    public void insertLast(E o) {
         if (first != null) {
-            SLLNode tmp = first;
+            SLLNode<E> tmp = first;
             while (tmp.succ != null)
                 tmp = tmp.succ;
-            SLLNode ins = new SLLNode(id, age, null);
+            SLLNode<E> ins = new SLLNode<E>(o, null);
             tmp.succ = ins;
         } else {
-            insertFirst(id, age);
+            insertFirst(o);
         }
     }
 
-    public SLLNode getFirst() {
+    public E deleteFirst() {
+        if (first != null) {
+            SLLNode<E> tmp = first;
+            first = first.succ;
+            return tmp.element;
+        } else {
+            System.out.println("Listata e prazna");
+            return null;
+        }
+    }
+
+    public E delete(SLLNode<E> node) {
+        if (first != null) {
+            if (first == node) {
+                return this.deleteFirst();
+            }
+
+            SLLNode<E> tmp = first;
+            while (tmp.succ != node && tmp.succ.succ != null)
+                tmp = tmp.succ;
+
+            if (tmp.succ == node) {
+                tmp.succ = tmp.succ.succ;
+                return node.element;
+            } else {
+                System.out.println("Elementot ne postoi vo listata");
+                return null;
+            }
+        } else {
+            System.out.println("Listata e prazna");
+            return null;
+        }
+
+    }
+
+    public SLLNode<E> getFirst() {
         return first;
     }
 
-    @Override
-    public String toString() {
-        String s = new String();
-        SLLNode dvizi = first;
-        while (dvizi != null) {
-            s = s + dvizi.id + " ";
-            dvizi = dvizi.succ;
+    public SLLNode<E> find(E o) {
+        if (first != null) {
+            SLLNode<E> tmp = first;
+            while (tmp.element != o && tmp.succ != null)
+                tmp = tmp.succ;
+
+            if (tmp.element == o) {
+                return tmp;
+            } else {
+                System.out.println("Elementot ne postoi vo listata");
+            }
+        } else {
+            System.out.println("Listata e prazna");
         }
-        return s;
+        return first;
+    }
+
+    public Iterator<E> iterator() {
+        // Return an iterator that visits all elements of this list, in left-to-right order.
+        return new LRIterator<E>();
+    }
+
+
+    // //////////Inner class ////////////
+
+    private class LRIterator<E> implements Iterator<E> {
+
+        private SLLNode<E> place, curr;
+
+        private LRIterator() {
+            place = (SLLNode<E>) first;
+            curr = null;
+        }
+
+        public boolean hasNext() {
+            return (place != null);
+        }
+
+        public E next() {
+            if (place == null)
+                throw new NoSuchElementException();
+            E nextElem = place.element;
+            curr = place;
+            place = place.succ;
+            return nextElem;
+        }
+
+        public void remove() {
+            //Not implemented
+        }
+    }
+
+    public void mirror() {
+        if (first != null) {
+            //m=nextsucc, p=tmp,q=next
+            SLLNode<E> tmp = first;
+            SLLNode<E> newsucc = null;
+            SLLNode<E> next;
+
+            while (tmp != null) {
+                next = tmp.succ;
+                tmp.succ = newsucc;
+                newsucc = tmp;
+                tmp = next;
+            }
+            first = newsucc;
+        }
+
+    }
+
+    public void merge(SLL<E> in) {
+        if (first != null) {
+            SLLNode<E> tmp = first;
+            while (tmp.succ != null)
+                tmp = tmp.succ;
+            tmp.succ = in.getFirst();
+        } else {
+            first = in.getFirst();
+        }
     }
 }
-
 
 //Дадени се две еднострано поврзани листи чии јазли содржат по еден природен број. Листите се сортирани во растечки редослед.
 // Треба да се спојат двете листи во една така што резултантната листа да е сортирана. Сортирањето е подредување со слевање.
