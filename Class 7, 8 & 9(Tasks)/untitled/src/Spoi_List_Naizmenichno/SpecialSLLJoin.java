@@ -236,17 +236,71 @@ class SLL<E> {
 // од првата листа во резултантната, па првите два од втората листа, па следните два од првата, па следните два од втората итн.
 // Јазлите што ќе останат треба да се додадат на крај во резултантната листа, прво оние што останале од првата листа,
 // потоа оние што останале од втората листа.
-//Во првиот ред од влезот се дадени броевите од кои се составени јазлите по редослед во првата листа,
+// Во првиот ред од влезот се дадени броевите од кои се составени јазлите по редослед во првата листа,
 // а во вториот ред броевите од кои се составени јазлите по редослед во втората листа. На излез треба да се испечатат
 // јазлите по редослед во резултантната споена листа.
 
-//TODO: make test cases
 
+// 4 --> n
+// 1 2 3 4 --> lista1
+// 5 --> m
+// 1 2 3 4 5 --> lista2
 public class SpecialSLLJoin {
 
     //TODO: implement function
+    private static void spoi_list_naizmenichno(SLL<Integer> lista1, SLL<Integer> lista2, SLL<Integer> lista3) {
+        SLLNode<Integer> tmp1 = lista1.getFirst();
+        SLLNode<Integer> tmp2 = lista2.getFirst();
+
+        while (tmp1 != null && tmp1.succ != null && tmp2 != null && tmp2.succ != null) {
+            lista3.insertLast(tmp1.element);
+            lista3.insertLast(tmp1.succ.element);
+
+            lista3.insertLast(tmp2.element);
+            lista3.insertLast(tmp2.succ.element);
+            tmp1 = tmp1.succ.succ;
+            tmp2 = tmp2.succ.succ;
+        }
+
+        while (tmp1 != null) {
+            lista3.insertLast(tmp1.element);
+            tmp1 = tmp1.succ;
+        }
+
+        while (tmp2 != null) {
+            lista3.insertLast(tmp2.element);
+            tmp2 = tmp2.succ;
+        }
+
+        System.out.println(lista3);
+    }
+
 
     public static void main(String[] args) {
-        //TODO: main
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+
+        SLL<Integer> lista1 = new SLL<>();
+
+        for (int i = 0; i < n; i++) {
+            int element = sc.nextInt();
+            lista1.insertLast(element);
+        }
+
+        int m = sc.nextInt();
+
+        SLL<Integer> lista2 = new SLL<>();
+
+        for (int i = 0; i < m; i++) {
+            lista2.insertLast(sc.nextInt());
+        }
+
+        SLL<Integer> lista3 = new SLL<>();
+
+        spoi_list_naizmenichno(lista1, lista2, lista3);
+
+
     }
+
 }

@@ -1,8 +1,7 @@
-package Spoi_Listi;
+package String;
 
 import java.io.BufferedReader;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 class SLLNode<E> {
     protected E element;
@@ -18,6 +17,7 @@ class SLLNode<E> {
         return element.toString();
     }
 }
+
 
 class SLL<E> {
     private SLLNode<E> first;
@@ -37,7 +37,7 @@ class SLL<E> {
             SLLNode<E> tmp = first;
             ret = 1;
             while (tmp.succ != null) {
-                tmp = tmp.succ; // i++
+                tmp = tmp.succ;
                 ret++;
             }
             return ret;
@@ -71,22 +71,21 @@ class SLL<E> {
             SLLNode<E> ins = new SLLNode<E>(o, node.succ);
             node.succ = ins;
         } else {
-            System.out.println("Dadeniot jazol e null");
+            System.out.println("Dadenot jazol e null");
         }
     }
 
     public void insertBefore(E o, SLLNode<E> before) {
 
         if (first != null) {
+            SLLNode<E> tmp = first;
             if (first == before) {
                 this.insertFirst(o);
                 return;
             }
             //ako first!=before
-            SLLNode<E> tmp = first;
             while (tmp.succ != before)
                 tmp = tmp.succ;
-
             if (tmp.succ == before) {
                 SLLNode<E> ins = new SLLNode<E>(o, before);
                 tmp.succ = ins;
@@ -123,14 +122,12 @@ class SLL<E> {
 
     public E delete(SLLNode<E> node) {
         if (first != null) {
+            SLLNode<E> tmp = first;
             if (first == node) {
                 return this.deleteFirst();
             }
-
-            SLLNode<E> tmp = first;
             while (tmp.succ != node && tmp.succ.succ != null)
                 tmp = tmp.succ;
-
             if (tmp.succ == node) {
                 tmp.succ = tmp.succ.succ;
                 return node.element;
@@ -154,7 +151,6 @@ class SLL<E> {
             SLLNode<E> tmp = first;
             while (tmp.element != o && tmp.succ != null)
                 tmp = tmp.succ;
-
             if (tmp.element == o) {
                 return tmp;
             } else {
@@ -165,87 +161,48 @@ class SLL<E> {
         }
         return first;
     }
-
-    public Iterator<E> iterator() {
-        // Return an iterator that visits all elements of this list, in left-to-right order.
-        return new LRIterator<E>();
-    }
-
-
-    // //////////Inner class ////////////
-
-    private class LRIterator<E> implements Iterator<E> {
-
-        private SLLNode<E> place, curr;
-
-        private LRIterator() {
-            place = (SLLNode<E>) first;
-            curr = null;
-        }
-
-        public boolean hasNext() {
-            return (place != null);
-        }
-
-        public E next() {
-            if (place == null)
-                throw new NoSuchElementException();
-            E nextElem = place.element;
-            curr = place;
-            place = place.succ;
-            return nextElem;
-        }
-
-        public void remove() {
-            //Not implemented
-        }
-    }
-
-    public void mirror() {
-        if (first != null) {
-            //m=nextsucc, p=tmp,q=next
-            SLLNode<E> tmp = first;
-            SLLNode<E> newsucc = null;
-            SLLNode<E> next;
-
-            while (tmp != null) {
-                next = tmp.succ;
-                tmp.succ = newsucc;
-                newsucc = tmp;
-                tmp = next;
-            }
-            first = newsucc;
-        }
-
-    }
-
-    public void merge(SLL<E> in) {
-        if (first != null) {
-            SLLNode<E> tmp = first;
-            while (tmp.succ != null)
-                tmp = tmp.succ;
-            tmp.succ = in.getFirst();
-        } else {
-            first = in.getFirst();
-        }
-    }
 }
 
-//Дадени се две еднострано поврзани листи чии јазли содржат по еден природен број. Листите се сортирани во растечки редослед.
-// Треба да се спојат двете листи во една така што резултантната листа да е сортирана. Сортирањето е подредување со слевање.
-// Јазлите кои се јавуваат како дупликати (од иста листа или од различна) да се отстранат.
-// Во првиот ред од влезот е даден бројот на јазли во првата листа, потоа во вториот ред се дадени броевите од кои
-// се составени јазлите по редослед во првата листа, па во третиот ред е даден бројот на јазли во втората листа,
-// и на крај во четвртиот ред броевите од кои се составени јазлите по редослед во втората листа. На излез треба
-// да се испечатат јазлите по редослед во резултантната споена листа. Име на класата: SLLJoinLists
+// Dadena e DLL<String> da se modificira taka shto:
+// Vlez: mila->lina->ana->kate->
+// Izlez: MilA->LinA->AnA->KatE->
 
-//TODO: make test cases
 
-public class SLLJoinLists {
+public class Main {
 
-    //TODO: implement function
+    private static void modificiraj(SLL<String> lista) {
+        SLLNode<String> tmp = lista.getFirst();
+
+        while (tmp != null) {
+            String element = tmp.element;
+
+            element = element.substring(0, 1).toUpperCase()
+                    + element.substring(1, element.length() - 1)
+                    + element.substring(element.length() - 1).toUpperCase();
+
+//            tmp.element = element; ova se pishuva samo ako mozhe da se menuva vrednosta na jazolot
+            lista.insertBefore(element, tmp);
+            lista.delete(tmp);
+            tmp = tmp.succ;
+        }
+
+        System.out.println(lista);
+    }
 
     public static void main(String[] args) {
-        //TODO: main
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+
+        SLL<String> lista = new SLL<String>();
+
+        for (int i = 0; i < n; i++) {
+            lista.insertLast(sc.next());
+        }
+
+
+        modificiraj(lista);
     }
+
+
 }
